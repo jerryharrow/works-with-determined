@@ -14,8 +14,8 @@
   },
   "transform": {
     "cmd": ["/bin/sh"],
-    "stdin": ["python train.py --git-url https://git@github.com:/determined-ai/works-with-determined.git --git-ref master --sub-dir pachyderm-seldon/use-case/image-classification/experiment --config const.yaml --repo dogs-and-cats --model dogs-and-cats"],
-    "image": "gcr.io/determined-ai/pachyderm-seldon/train:0.0.20",
+    "stdin": ["python train.py --git-url https://git@github.com:/jerryharrow/works-with-determined.git --git-ref master --sub-dir pachyderm-seldon/use-case/image-classification/experiment --config const.yaml --repo dogs-and-cats --model dogs-and-cats"],
+    "image": "train:0.0.1",
     "secrets": [
       {
         "name": "pipeline-secret",
@@ -36,6 +36,16 @@
         "name": "pipeline-secret",
         "key": "pac_token",
         "env_var": "PAC_TOKEN"
+      },
+      {
+        "name": "pipeline-secret",
+        "key": "pac_master",
+        "env_var": "PAC_MASTER"
+      },
+      {
+        "name": "pipeline-secret",
+        "key": "pac_port",
+        "env_var": "PAC_PORT"
       }
     ]
   }

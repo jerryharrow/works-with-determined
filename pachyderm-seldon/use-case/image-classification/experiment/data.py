@@ -31,7 +31,7 @@ class CatDogDataset(Dataset):
         # Create label for image based on file name (dog = 0, cat = 1)
         label = 0 if "dog" in str(img_path) else 1
         sample = (image, label)
-        # print(f"Loaded image: index='{idx}', name='{img_path}'")
+        print(f"Loaded image: index='{idx}', name='{img_path}'")
         return sample
 
 
@@ -61,7 +61,7 @@ def download_pach_repo(pachyderm_host, pachyderm_port, repo, branch, root, token
 
     for src_path, des_path in files:
         src_file = client.get_file((repo, branch), src_path)
-        # print(f'Downloading {src_path} to {des_path}')
+        print(f'Downloading {src_path} to {des_path}')
 
         with open(des_path, "wb") as dest_file:
             shutil.copyfileobj(src_file, dest_file)

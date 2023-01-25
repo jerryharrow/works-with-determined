@@ -105,6 +105,12 @@ def setup_config(config_file, repo, pipeline, job_id):
     config["data"]["pachyderm"]["branch"] = job_id
     config["data"]["pachyderm"]["token"]  = os.getenv("PAC_TOKEN")
 
+    # If so specified, redirect PAC_HOST/PORT to access Pachyderm API
+    if os.getenv("PAC_MASTER"):
+        config["data"]["pachyderm"]["host"]   = os.getenv("PAC_MASTER")
+    if os.getenv("PAC_PORT"):
+        config["data"]["pachyderm"]["port"]   = os.getenv("PAC_PORT")
+
     config["labels"] = [ repo, job_id, pipeline ]
 
     return config

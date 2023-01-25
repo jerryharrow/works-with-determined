@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+   echo "$0 Usage: {hostname} [PORT]"
+   exit 1
+fi 
+
+MASTER_PORT=8090
+if [ ! -z "$2" ]; then
+MASTER_PORT=$2
+fi
+MASTER_HOST=$1
+ssh -NR ${MASTER_HOST}:${MASTER_PORT}:localhost:30650 ${MASTER_HOST}
