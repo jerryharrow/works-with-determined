@@ -49,8 +49,8 @@ def download_pach_repo(pachyderm_host, pachyderm_port, repo, branch, root, token
 
     for diff in client.diff_file((repo, branch), "/"):
         src_path = diff.new_file.file.path
-        des_path = os.path.join(root, src_path[1:])
-        # print(f"Got src='{src_path}', des='{des_path}'")
+        des_path = root
+        print(f"Got src='{src_path}', des='{des_path}'")
 
         if diff.new_file.file_type == FileType.FILE:
             if src_path != "":

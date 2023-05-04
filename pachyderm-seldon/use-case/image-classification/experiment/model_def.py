@@ -21,7 +21,7 @@ logging.getLogger().setLevel(logging.INFO)
 class DogCatModel(PyTorchTrial):
     def __init__(self, context):
         self.context = context
-        self.download_directory = f"/tmp/data-rank{self.context.distributed.get_rank()}"
+        self.download_directory = f"/pfs/dogs-and-cats"
 
         load_weights = (os.environ.get('SERVING_MODE') != 'true')
         logging.info(f"Loading weights : {load_weights}")
@@ -88,17 +88,29 @@ class DogCatModel(PyTorchTrial):
 
     def download_data(self):
         data_config = self.context.get_data_config()
-        data_dir = os.path.join(self.download_directory, 'data')
+        data_dir = self.download_directory
 
-        files = download_pach_repo(
-            data_config['pachyderm']['host'],
-            data_config['pachyderm']['port'],
-            data_config["pachyderm"]["repo"],
-            data_config["pachyderm"]["branch"],
-            data_dir,
-            data_config["pachyderm"]["token"]
-        )
+        if not os.path.exists(data_dir):
+            print(f'Data dir does not exist, download files manually: {data_dir}')
+            files = download_pach_repo(
+                data_config['pachyderm']['host'],
+                data_config['pachyderm']['port'],
+                data_config["pachyderm"]["repo"],
+                data_config["pachyderm"]["branch"],
+                data_dir,
+                data_config["pachyderm"]["token"]
+            )
+
+        else:
+            print(f"Using /pfs for dataset")
+            base = os.path.join(data_dir,"data")
+            file_list = os.listdir(base)
+            files = []
+            for f in file_list:
+                files.append((os.path.join("/data",f), os.path.join(data_dir,"data",f)))
+
         print(f'Data dir set to : {data_dir}')
+        for f in files: print(f'File: {f}') 
 
         return [des for src, des in files ]
 
@@ -111,7 +123,10 @@ class DogCatModel(PyTorchTrial):
         train_ds, val_ds = torch.utils.data.random_split(files, [train_size, val_size])
 
         self.train_ds = CatDogDataset(train_ds, transform=self.get_train_transforms())
-        self.val_ds   = CatDogDataset(val_ds,   transform=self.get_test_transforms())
+        if val_size == 0:
+            self.val_ds = self.train_ds
+        else:
+            self.val_ds   = CatDogDataset(val_ds,   transform=self.get_test_transforms())
         print(f"Datasets created: train_size={train_size}, val_size={val_size}")
 
     # -------------------------------------------------------------------------
