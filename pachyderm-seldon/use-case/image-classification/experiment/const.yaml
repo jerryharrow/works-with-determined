@@ -1,4 +1,6 @@
 name: dogcat_single
+environment:
+   image: determinedai/environments:pach-cuda-11.3-pytorch-1.12-tf-2.8-gpu-9b5db1b
 data:
     pachyderm:
       host:
