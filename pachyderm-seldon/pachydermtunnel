@@ -1,4 +1,7 @@
 #!/bin/bash
+# Setup a proxy port from a remote host and port to
+# localhost:30650 (the pachd port when using pachctl port-forward).
+
 
 if [ -z "$1" ]; then
    echo "$0 Usage: {hostname} [PORT]"

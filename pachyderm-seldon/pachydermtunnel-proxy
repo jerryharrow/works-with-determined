@@ -1,0 +1,15 @@
+#!/bin/bash
+# Setup a tunnel from a remote system to localhost:80 (which is the
+# default port the pachyderm proxy listens on).
+if [ -z "$1" ]; then
+   echo "$0 Usage: {hostname} [PORT]"
+   exit 1
+fi 
+
+MASTER_PORT=8090
+if [ ! -z "$2" ]; then
+MASTER_PORT=$2
+fi
+MASTER_HOST=$1
+ssh -vv -NR ${MASTER_HOST}:${MASTER_PORT}:localhost:80 ${MASTER_HOST}
+
